@@ -1,19 +1,16 @@
 $(function () {
-  
   var timeOfDay = $('#time-display');
   var saveButtons = $('.saveBtn');
-  // const rows = document.getElementsByClassName('row');
 
   function displayTime() {
-      var rightNow = dayjs().format('MMM DD, YYYY [at] hh:mm a');
-      timeOfDay.text(rightNow);
-    }
+    var rightNow = dayjs().format('MMM DD, YYYY [at] hh:mm a');
+    timeOfDay.text(rightNow);
+  }
 
   displayTime();
   setInterval(displayTime, 1000);
 
   function pastPresentFuture() {
-
     var currentHour = parseInt(dayjs().format('H'));
     
     console.log(currentHour)
@@ -33,40 +30,25 @@ $(function () {
     
   saveButtons.on('click', function() {
     var eventDescription = $(this).siblings('textarea').val();
-    var events = localStorage.getItem('events');
-    var rowId = $(this).attr('id');
-
-    events = JSON.parse(events) || {};
-
-
-      console.log(events)
-    // get events from local storage
-    // take the string and parse it into an object
-    // get ID of timeblock
-    // use ID to update events
-    // 
-
+    var events = JSON.parse(localStorage.getItem('events')) || {};
+    var timeBlockId = this.parentElement.getAttribute('id');
     
-
+    events[timeBlockId] = eventDescription;
 
     localStorage.setItem('events', JSON.stringify(events));
-        
-    });
+  });
 
-    function displayEvents() {
-      $('.time-block').each(function() {
-        // var rowId = $(this).attr('id');
-        var events = localStorage.getItem('events');
+  function displayEvents() {
+    var events = JSON.parse(localStorage.getItem('events'));
 
-
-        if (events) {
-          eventDescriptionText.val(JSON.parse(events));
-        } else {
-          events = [];
-        }
+    if (events) {
+      Object.keys(events).forEach(function(timeBlockId) {
+        var eventDescription = events[timeBlockId];
+        $('#' + timeBlockId).find('textarea').val(eventDescription);
       });
     }
+  }
 
-    pastPresentFuture();
-    displayEvents();
-  });
+  pastPresentFuture();
+  displayEvents();
+});
