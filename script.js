@@ -32,7 +32,7 @@ $(function () {
     var eventDescription = $(this).siblings('textarea').val();
     var events = JSON.parse(localStorage.getItem('events')) || {};
     var timeBlockId = this.parentElement.getAttribute('id');
-    
+
     events[timeBlockId] = eventDescription;
 
     localStorage.setItem('events', JSON.stringify(events));
